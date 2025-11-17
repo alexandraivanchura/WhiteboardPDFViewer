@@ -227,9 +227,11 @@
             var totalPages = 0;
             var scale = 1.2;
 
-            var pdfFilePath = './PDF/Presentation.pdf';
+            var roomNumber = getCookie("RoomNumber") 
+            
+            var pdfFilePath;
 
-            var roomNumber = "1"
+            getRoomPDF();
 
             function showError(message) {
                 errorContainer.innerHTML = '<div class="error">' + message + '</div>';
@@ -362,6 +364,34 @@
             }
 
             setInterval(getRoomPageValue, 500);
+
+            async function getRoomPDF() {
+                try {
+                    const response = await fetch('get-file.php');
+                    const result = await response.json();
+                    roomData = result.success ? result.data : null;
+                } catch (error) {
+                    console.error('Error loading room data:', error);
+                    roomData = null;
+                }
+
+                if (!roomData || !roomData.Rooms) {                    
+                    return null;
+                }
+
+                const room = roomData.Rooms.find(r => r.Number === roomNumber);
+
+                if (room) { 
+                    try {
+                        const res = await room.PDFLink;
+                        pdfFilePath = res;
+                        loadPDF();
+                    } catch (error) {
+                        console.error('Error getting PDF link:', error);
+                        return null; // или значение по умолчанию
+                    }
+                }
+            }
 
             async function updateRoomPageValue(roomNumber, newPageValue) {
                 try {

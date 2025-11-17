@@ -55,7 +55,7 @@ if (!move_uploaded_file($file['tmp_name'], $destination)) {
 
 // Создаем новую запись комнаты
 $newRoom = [
-    'Number' => $roomNumber,
+    'Number' => (string)$roomNumber,
     'PageValue' => 1,
     'PDFLink' => './Uploads/' . $filename,
     'Date' => date('m.d.Y') // Текущая дата в формате MM.DD.YYYY
