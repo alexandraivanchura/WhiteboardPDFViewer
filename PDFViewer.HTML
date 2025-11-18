@@ -51,8 +51,9 @@
         
         h1 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-right: 20px;
             font-size: 24px;
+            justify-self: center;
         }
         
         .pdf-container {
@@ -167,14 +168,14 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container">        
         <div class="loading" id="loading">
             <p>Loading PDF Viewer...</p>
         </div>
 
         <div id="error-container"></div>
         
-        <div class="pdf-container">
+        <div class="pdf-container" id="pdf-container">
             <div class="slide-placeholder" id="slide-placeholder">
                 <h2>PDF Presentation</h2>
                 <p>The presentation will load here</p>
@@ -183,6 +184,7 @@
         </div>
         
         <div class="navigation">
+            <h1 id="room-title">Комната</h1>
             <button class="nav-btn" id="first-btn">First</button>
             <button class="nav-btn" id="prev-btn">Prev</button>
             <div class="page-info">Page <span id="current-page">1</span> of <span id="total-pages">0</span></div>
@@ -222,13 +224,17 @@
             var firstBtn = document.getElementById('first-btn');
             var lastBtn = document.getElementById('last-btn');
 
+            var title = document.getElementById('room-title');
+            var pdfcontainer = document.getElementById('pdf-container');
+
             var pdfDoc = null;
             var currentPage = 1;
             var totalPages = 0;
             var scale = 1.2;
 
             var roomNumber = getCookie("RoomNumber") 
-            
+            title.innerText="Комната " + roomNumber;
+
             var pdfFilePath;
 
             getRoomPDF();
@@ -426,7 +432,8 @@
             firstBtn.addEventListener('click', function() { goToPage(1); });
             prevBtn.addEventListener('click', function() { goToPage(currentPage - 1); });
             nextBtn.addEventListener('click', function() { goToPage(currentPage + 1); });
-            lastBtn.addEventListener('click', function() { goToPage(totalPages); });            
+            lastBtn.addEventListener('click', function() { goToPage(totalPages); });    
+            pdfcontainer.addEventListener('click', function() { goToPage(currentPage + 1); });       
 
             document.addEventListener('keydown', function(e) {
                 if (!pdfDoc) return;

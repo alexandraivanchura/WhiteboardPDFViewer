@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 
 $uploadDir = __DIR__ . '/Uploads/';
 
-// Создать папку для загрузок, если её нет
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
 }
@@ -39,8 +38,60 @@ if ($currentData === null) {
     $currentData = ['Rooms' => []];
 }
 
-// Генерация имени файла
-$roomNumber = count($currentData['Rooms']) + 1;
+// Функция для удаления просроченных комнат
+function cleanupExpiredRooms(&$roomsData, $uploadDir) {
+    $currentDate = date('m.d.Y');
+    $roomsToKeep = [];
+    
+    foreach ($roomsData['Rooms'] as $room) {
+        if ($room['ExpiredDate'] === $currentDate) {
+            // Удаляем файл PDF
+            $pdfPath = __DIR__ . '/' . ltrim($room['PDFLink'], './');
+            if (file_exists($pdfPath)) {
+                unlink($pdfPath);
+            }
+            // Пропускаем добавление этой комнаты в новый массив (удаляем её)
+            continue;
+        }
+        $roomsToKeep[] = $room;
+    }
+    
+    $roomsData['Rooms'] = $roomsToKeep;
+}
+
+// Очищаем просроченные комнаты перед добавлением новой
+cleanupExpiredRooms($currentData, $uploadDir);
+
+// Функция для генерации случайного номера комнаты
+function generateRandomRoomNumber($existingRooms) {
+    $maxAttempts = 100; // Максимальное количество попыток во избежание бесконечного цикла
+    $attempts = 0;
+    
+    while ($attempts < $maxAttempts) {
+        // Генерируем случайное число в диапазоне 1000-9999
+        $randomNumber = (string)rand(1000, 9999);
+        
+        // Проверяем, существует ли уже комната с таким номером
+        $exists = false;
+        foreach ($existingRooms as $room) {
+            if ($room['Number'] === $randomNumber) {
+                $exists = true;
+                break;
+            }
+        }
+        
+        if (!$exists) {
+            return $randomNumber;
+        }
+        
+        $attempts++;
+    }
+    
+    // Если не удалось сгенерировать уникальный номер, используем временную метку
+    return (string)time();
+}
+
+$roomNumber = generateRandomRoomNumber($currentData['Rooms']);
 $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
 $filename = $roomNumber . '.' . $extension; // Используем номер комнаты как имя файла
 $destination = $uploadDir . $filename;
@@ -58,7 +109,8 @@ $newRoom = [
     'Number' => (string)$roomNumber,
     'PageValue' => 1,
     'PDFLink' => './Uploads/' . $filename,
-    'Date' => date('m.d.Y') // Текущая дата в формате MM.DD.YYYY
+    'Date' => date('m.d.Y'), // Текущая дата в формате MM.DD.YYYY
+    'ExpiredDate' => date('m.d.Y', strtotime('+2 days'))
 ];
 
 // Проверяем, существует ли уже комната с таким номером
