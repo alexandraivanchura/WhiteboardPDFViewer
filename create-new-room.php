@@ -38,20 +38,24 @@ if ($currentData === null) {
     $currentData = ['Rooms' => []];
 }
 
-// Функция для удаления просроченных комнат
 function cleanupExpiredRooms(&$roomsData, $uploadDir) {
-    $currentDate = date('m.d.Y');
+    $currentTimestamp = time();
     $roomsToKeep = [];
     
     foreach ($roomsData['Rooms'] as $room) {
-        if ($room['ExpiredDate'] === $currentDate) {
-            // Удаляем файл PDF
-            $pdfPath = __DIR__ . '/' . ltrim($room['PDFLink'], './');
-            if (file_exists($pdfPath)) {
-                unlink($pdfPath);
+        // Преобразуем дату из формата "m.d.Y" в timestamp
+        $expiredDateParts = explode('.', $room['ExpiredDate']);
+        if (count($expiredDateParts) === 3) {
+            $expiredTimestamp = mktime(0, 0, 0, $expiredDateParts[0], $expiredDateParts[1], $expiredDateParts[2]);
+            
+            // Если дата истечения меньше или равна текущей
+            if ($expiredTimestamp <= $currentTimestamp) {
+                $pdfPath = __DIR__ . '/' . ltrim($room['PDFLink'], './');
+                if (file_exists($pdfPath)) {
+                    unlink($pdfPath);
+                }
+                continue;
             }
-            // Пропускаем добавление этой комнаты в новый массив (удаляем её)
-            continue;
         }
         $roomsToKeep[] = $room;
     }
