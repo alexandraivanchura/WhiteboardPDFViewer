@@ -13,7 +13,7 @@
         }
         
         body {
-            background: #2a5298;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
             color: white;
             padding: 20px;
             min-height: 100vh;
@@ -32,6 +32,7 @@
             margin-bottom: 30px;
             font-size: 32px;
             width: 100%;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .main-content {
@@ -63,7 +64,7 @@
         
         .search-input {
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             font-size: 20px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
@@ -71,16 +72,24 @@
             color: white;
             text-align: center;
             margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
         
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        .search-input:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
         }
         
         .search-input:focus {
             outline: none;
             border-color: white;
             background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
         
         .keyboard {
@@ -92,7 +101,7 @@
         }
         
         .key {
-            padding: 10px 30px;
+            padding: 15px 30px;
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
@@ -106,11 +115,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .key:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
         
         .key:active {
@@ -118,19 +130,19 @@
         }
         
         .key.clear {
-            background: rgba(255, 100, 100, 0.3);
+            background: linear-gradient(135deg, rgba(255, 100, 100, 0.3), rgba(255, 80, 80, 0.5));
         }
         
         .key.clear:hover {
-            background: rgba(255, 100, 100, 0.5);
+            background: linear-gradient(135deg, rgba(255, 100, 100, 0.5), rgba(255, 80, 80, 0.7));
         }
         
         .key.backspace {
-            background: rgba(255, 200, 100, 0.3);
+            background: linear-gradient(135deg, rgba(255, 200, 100, 0.3), rgba(255, 180, 80, 0.5));
         }
         
         .key.backspace:hover {
-            background: rgba(255, 200, 100, 0.5);
+            background: linear-gradient(135deg, rgba(255, 200, 100, 0.5), rgba(255, 180, 80, 0.7));
         }
         
         .rooms-container {
@@ -155,23 +167,30 @@
             align-items: center;
             justify-content: center;
             min-height: 140px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .room-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .room-btn:active {
+            transform: translateY(0);
         }
         
         .room-btn.selected {
             background: rgba(255, 255, 255, 0.3);
             border-color: white;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
         
         .room-btn.highlighted {
-            background: rgba(100, 255, 100, 0.3);
+            background: linear-gradient(135deg, rgba(100, 255, 100, 0.3), rgba(80, 255, 80, 0.5));
             border-color: #4CAF50;
-            box-shadow: 0 0 15px rgba(100, 255, 100, 0.5);
+            box-shadow: 0 0 20px rgba(100, 255, 100, 0.5);
         }
         
         .loading {
@@ -186,12 +205,13 @@
         
         .error {
             background: rgba(255, 0, 0, 0.2);
-            border: 1px solid red;
+            border: 1px solid rgba(255, 100, 100, 0.5);
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 10px;
             margin: 10px 0;
             text-align: center;
             width: 100%;
+            backdrop-filter: blur(5px);
         }
         
         .search-results {
@@ -208,93 +228,8 @@
             text-align: center;
             width: 100%;
             font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-
-        /* @media (max-width: 900px) {
-            .main-content {
-                flex-direction: column;
-                gap: 30px;
-            }
-            
-            .left-panel {
-                flex: none;
-                width: 100%;
-                max-width: 400px;
-                margin: 0 auto;
-            }
-            
-            .right-panel {
-                width: 100%;
-            }
-            
-            .rooms-container {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 15px;
-            }
-            
-            .room-btn {
-                min-height: 120px;
-                font-size: 28px;
-                padding: 20px 10px;
-            }
-            
-            .key {
-                padding: 15px;
-                font-size: 20px;
-            }
-            
-            .search-input {
-                padding: 15px;
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-            
-            .rooms-container {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                gap: 12px;
-            }
-            
-            .room-btn {
-                min-height: 100px;
-                font-size: 24px;
-                padding: 15px 8px;
-            }
-            
-            .key {
-                padding: 12px;
-                font-size: 18px;
-            }
-            
-            h1 {
-                font-size: 28px;
-                margin-bottom: 20px;
-            }
-            
-            .panel-title {
-                font-size: 20px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .room-btn {
-                min-height: 80px;
-                font-size: 20px;
-            }
-            
-            .key {
-                padding: 10px;
-                font-size: 16px;
-            }
-            
-            .rooms-container {
-                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            }
-        } */
     </style>
 </head>
 <body>

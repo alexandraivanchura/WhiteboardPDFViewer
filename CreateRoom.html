@@ -3,7 +3,7 @@
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Selection</title>
+    <title>Создание комнаты</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: #2a5298;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
             color: white;
             padding: 20px;
             min-height: 100vh;
@@ -26,68 +26,123 @@
             max-width: 800px;
             width: 100%;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
         }
         
         h1 {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 28px;
+            margin-bottom: 10px;
+            font-size: 32px;
+            width: 100%;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .description {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             line-height: 1.5;
             max-width: 600px;
+            font-size: 18px;
+            opacity: 0.9;
         }
         
-        .room-btn {
+        .upload-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .file-input {
+            width: 100%;
             padding: 15px;
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
+            border-radius: 10px;
             color: white;
-            cursor: pointer;
+            font-size: 16px;
             transition: all 0.3s ease;
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            width: 80%;
-            align-self: center;
-            margin-bottom: 3%;
         }
         
-        .room-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
+        .file-input:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
         }
         
-        .room-btn.selected {
+        .file-input::file-selector-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input::file-selector-button:hover {
             background: rgba(255, 255, 255, 0.3);
-            border-color: white;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         
         .action-btn {
-            padding: 12px 25px;
-            background: #4CAF50;
-            border: none;
-            border-radius: 5px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            transition: background 0.3s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .action-btn:hover {
-            background: #45a049;
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
         
-        .action-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .info-content {
+            line-height: 1.6;
+            text-align: center;
+            opacity: 0.9;
         }
         
         .loading {
@@ -97,48 +152,28 @@
         
         .error {
             background: rgba(255, 0, 0, 0.2);
-            border: 1px solid red;
+            border: 1px solid rgba(255, 100, 100, 0.5);
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 10px;
             margin: 10px 0;
             text-align: center;
-        }
-        
-        .info-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        
-        .info-title {
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 18px;
-        }
-        
-        .info-content {
-            line-height: 1.5;
-        }
-        
-        @media (max-width: 600px) {
-            .rooms-container {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
-            
-            .room-btn {
-                padding: 12px;
-                font-size: 16px;
-            }
+            width: 100%;
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Загрузите файл .pdf (Вашу презентацию), чтобы создать комнату</h1>
+        <h1>Создайте комнату</h1>
+
+        <div class="description">
+           Загрузите файл .pdf (Вашу презентацию), чтобы создать комнату. Комната будет удалена через 2 дня
+        </div>
         
-        <input type="file" id="pdfFile" accept=".pdf">
-        <button onclick="uploadFile()">Загрузить PDF</button>
+        <div class="upload-section">
+            <input type="file" id="pdfFile" accept=".pdf"  class="file-input">
+            <button onclick="uploadFile()" class="action-btn">Загрузить PDF</button>
+        </div>
     </div>
 
     <script>

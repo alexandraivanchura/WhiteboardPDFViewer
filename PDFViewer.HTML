@@ -39,7 +39,7 @@
         }
         
         body {
-            background: #2a5298;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
             color: white;
             padding: 20px;
             min-height: 100vh;
@@ -47,27 +47,35 @@
         
         .container {
             margin: 0 auto;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
         
         h1 {
             text-align: center;
             margin-right: 20px;
-            font-size: 24px;
+            font-size: 32px;
             justify-self: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .pdf-container {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            height: 80vh; /* 80% высоты экрана */
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 80vh;
             min-height: 500px;
             display: flex;
             justify-content: center;
             align-items: center;
             flex: 1;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
         
         .pdf-viewer {
@@ -79,36 +87,61 @@
         }
         
         .slide-placeholder {
-            color: #333;
+            color: white;
             text-align: center;
+            opacity: 0.9;
         }
         
         .navigation {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
             flex-wrap: wrap;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
         
         .nav-btn {
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 5px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
             color: white;
             cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(0);
         }
         
         .nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .page-info {
             margin: 0 15px;
             font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .page-input {
@@ -134,13 +167,14 @@
             width: 70px;
             height: 50px;
             background: rgba(255,255,255,0.1);
-            border-radius: 3px;
+            border-radius: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             font-size: 12px;
             text-align: center;
+            transition: all 0.3s ease;
         }
         
         .thumbnail.active {
@@ -154,16 +188,19 @@
         
         .error {
             background: rgba(255,0,0,0.2);
-            border: 1px solid red;
+            border: 1px solid rgba(255,100,100,0.5);
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 10px;
             margin: 10px 0;
             text-align: center;
+            backdrop-filter: blur(5px);
         }
         
         canvas {
             max-width: 100%;
             height: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
