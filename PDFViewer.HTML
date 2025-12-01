@@ -41,13 +41,12 @@
         body {
             background: linear-gradient(135deg, #2a5298, #1e3c72);
             color: white;
-            padding: 20px;
-            min-height: 100vh;
+            /* padding: 20px;
+            min-height: 100vh; */
         }
         
         .container {
             margin: 0 auto;
-            max-width: 1200px;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -58,24 +57,16 @@
             margin-right: 20px;
             font-size: 32px;
             justify-self: center;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .pdf-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
             height: 80vh;
-            min-height: 500px;
             display: flex;
             justify-content: center;
             align-items: center;
             flex: 1;
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
         
         .pdf-viewer {
@@ -97,14 +88,8 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
         
         .nav-btn {
@@ -270,7 +255,7 @@
             var scale = 1.2;
 
             var roomNumber = getCookie("RoomNumber") 
-            title.innerText="Комната " + roomNumber;
+            title.innerText="" + roomNumber;
 
             var pdfFilePath;
 
