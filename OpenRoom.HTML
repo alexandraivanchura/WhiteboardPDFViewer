@@ -144,6 +144,14 @@
         .key.backspace:hover {
             background: linear-gradient(135deg, rgba(255, 200, 100, 0.5), rgba(255, 180, 80, 0.7));
         }
+
+        .key.enter {
+            background: linear-gradient(135deg, rgba(100, 255, 100, 0.3), rgba(80, 255, 80, 0.5));
+        }
+        
+        .key.enter:hover {
+            background: linear-gradient(135deg, rgba(100, 255, 100, 0.5), rgba(80, 255, 80, 0.7));
+        }
         
         .rooms-container {
             display: grid;
@@ -254,7 +262,7 @@
                         <div class="key" data-key="9">9</div>
                         <div class="key clear" data-key="clear">Clear</div>
                         <div class="key" data-key="0">0</div>
-                        <div class="key backspace" data-key="backspace">⌫</div>
+                        <div class="key enter" data-key="enter">Enter</div>
                     </div>
                     
                     <div class="search-results" id="search-results"></div>
@@ -338,7 +346,7 @@
                         handleKeyPress('clear');
                         e.preventDefault();
                     } else if (e.key === 'Enter') {
-                        selectFirstFilteredRoom();
+                        handleKeyPress('enter');
                         e.preventDefault();
                     }
                 });
@@ -357,6 +365,9 @@
                         break;
                     case 'backspace':
                         searchInput.value = currentValue.slice(0, -1);
+                        break;
+                    case 'enter':
+                        selectRoomByInput();
                         break;
                     default:
                         if (currentValue.length < 6) { // Limit input length
@@ -409,6 +420,37 @@
                     const roomNumber = filteredRooms[0].Number;
                     setCookie("RoomNumber", roomNumber);
                     window.location.href = `PDFViewer.HTML`;
+                }
+            }
+
+            function selectRoomByInput() {
+                const roomNumber = searchInput.value.trim();
+                
+                if (!roomNumber) {
+                    searchResults.textContent = 'Please enter a room number';
+                    searchResults.style.color = '#ff9999';
+                    return;
+                }
+                
+                const foundRoom = roomsData.Rooms.find(room => room.Number === roomNumber);
+                
+                if (foundRoom) {
+                    setCookie("RoomNumber", roomNumber);
+                    window.location.href = `PDFViewer.HTML`;
+                } else {
+                    searchResults.textContent = `Room ${roomNumber} not found`;
+                    searchResults.style.color = '#ff9999';
+                    
+                    // Check if there are any similar rooms
+                    const similarRooms = roomsData.Rooms.filter(room => 
+                        room.Number.includes(roomNumber)
+                    );
+                    
+                    if (similarRooms.length > 0) {
+                        searchResults.textContent += `. Did you mean: ${similarRooms.slice(0, 3).map(r => r.Number).join(', ')}?`;
+                        // Highlight similar rooms
+                        displayRooms(similarRooms);
+                    }
                 }
             }
             
