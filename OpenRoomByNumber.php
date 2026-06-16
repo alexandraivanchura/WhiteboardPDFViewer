@@ -3,13 +3,34 @@
 $path_info = $_SERVER['PATH_INFO'] ?? '';
 $number = ltrim($path_info, '/');
 
-// If a numeric value is present in the URL, display it
+$roomDataFile = __DIR__ . '/RoomData.json';
+
+// Читаем текущие данные
+$currentData = json_decode(file_get_contents($roomDataFile), true);
+if ($currentData === null) {
+    $currentData = ['Rooms' => []];
+}
+$existingRooms = $currentData['Rooms'];
+
+$exists = false;
+foreach ($existingRooms as $room) {
+    if ($room['Number'] === $number) {
+        $exists = true;
+        break;
+    }
+}
+
+if (!$exists) {
+    header('Location: ../OpenRoom.HTML');
+    exit;
+}
+
 if ($number !== '' && is_numeric($number)) {
     setcookie('RoomNumber', $number, time() + 86400, '/');
     header('Location: ../PDFViewer.HTML');
     exit;
 }
-// Otherwise, show the form (no number in URL)
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

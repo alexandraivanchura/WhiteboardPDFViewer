@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            background: linear-gradient(135deg, #2c2c2c, #2c2c2c);
             color: white;
             padding: 20px;
             min-height: 100vh;
@@ -32,7 +32,6 @@
             margin-bottom: 30px;
             font-size: 32px;
             width: 100%;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .main-content {
@@ -66,9 +65,9 @@
             width: 100%;
             padding: 15px;
             font-size: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 171, 61, 0.199);
+            border: 2px solid #FFAA3DFF;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.15);
             color: white;
             text-align: center;
             margin-bottom: 20px;
@@ -77,15 +76,12 @@
         }
         
         .search-input:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 171, 61, 0.331);
         }
         
         .search-input:focus {
             outline: none;
-            border-color: white;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            background: rgba(255, 171, 61, 0.331);
         }
         
         .search-input::placeholder {
@@ -102,8 +98,8 @@
         
         .key {
             padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 171, 61, 0.199);
+            border: 2px solid #FFAA3DFF;
             border-radius: 10px;
             color: white;
             cursor: pointer;
@@ -116,13 +112,10 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .key:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 171, 61, 0.331);
         }
         
         .key:active {
@@ -162,8 +155,8 @@
         
         .room-btn {
             padding: 25px 15px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 171, 61, 0.199);
+            border: 2px solid #FFAA3DFF;
             border-radius: 10px;
             color: white;
             cursor: pointer;
@@ -176,13 +169,10 @@
             justify-content: center;
             min-height: 140px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .room-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 171, 61, 0.331);
         }
         
         .room-btn:active {
@@ -190,15 +180,12 @@
         }
         
         .room-btn.selected {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: white;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 171, 61, 0.331);
         }
         
         .room-btn.highlighted {
-            background: linear-gradient(135deg, rgba(100, 255, 100, 0.3), rgba(80, 255, 80, 0.5));
-            border-color: #4CAF50;
-            box-shadow: 0 0 20px rgba(100, 255, 100, 0.5);
+            /* background: linear-gradient(135deg, rgba(100, 255, 100, 0.3), rgba(80, 255, 80, 0.5));
+            border-color: #4CAF50; */
         }
         
         .loading {

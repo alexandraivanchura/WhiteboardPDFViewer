@@ -1,6 +1,9 @@
 <?php
 header('Content-Type: application/json');
 
+// Максимальный размер загружаемого файла (1 МБ)
+define('MAX_FILE_SIZE', 0.7 * 1024 * 1024);
+
 $uploadDir = __DIR__ . '/Uploads/';
 
 if (!is_dir($uploadDir)) {
@@ -14,6 +17,35 @@ if (empty($_FILES['pdfFile'])) {
 }
 
 $file = $_FILES['pdfFile'];
+
+// 1. Проверка ошибок загрузки
+if ($file['error'] !== UPLOAD_ERR_OK) {
+    $errorMessages = [
+        UPLOAD_ERR_INI_SIZE   => 'Файл превышает максимальный размер, установленный сервером (php.ini)',
+        UPLOAD_ERR_FORM_SIZE  => 'Файл превышает максимальный размер, указанный в HTML-форме',
+        UPLOAD_ERR_PARTIAL    => 'Файл был загружен частично',
+        UPLOAD_ERR_NO_FILE    => 'Файл не был загружен',
+        UPLOAD_ERR_NO_TMP_DIR => 'Временная папка отсутствует',
+        UPLOAD_ERR_CANT_WRITE => 'Ошибка записи файла на диск',
+        UPLOAD_ERR_EXTENSION  => 'Загрузка файла остановлена PHP-расширением',
+    ];
+    $message = isset($errorMessages[$file['error']]) 
+                ? $errorMessages[$file['error']] 
+                : 'Неизвестная ошибка загрузки';
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => $message]);
+    exit;
+}
+
+// 2. Проверка размера файла (собственный лимит)
+if ($file['size'] > MAX_FILE_SIZE) {
+    http_response_code(413); // Payload Too Large
+    echo json_encode([
+        'success' => false,
+        'message' => 'Файл слишком большой. Максимальный размер: ' . (MAX_FILE_SIZE / 1024 / 1024) . ' МБ'
+    ]);
+    exit;
+}
 
 // Проверка типа файла
 $allowedTypes = ['application/pdf'];
