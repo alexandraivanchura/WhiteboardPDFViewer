@@ -5,62 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Selection</title>
     <style>
+        /* ── reset & base ── */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-        
+
+        html,
         body {
-            background: linear-gradient(135deg, #2c2c2c, #2c2c2c);
+            height: 100%;
+            overflow: hidden;
+            /* prevent body scroll, only right column scrolls */
+            background: #2c2c2c;
             color: white;
-            padding: 20px;
-            min-height: 100vh;
         }
-        
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
+
+        /* ── app wrapper: full viewport, column flex ── */
+        .app {
             display: flex;
             flex-direction: column;
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 32px;
+            height: 100vh;
             width: 100%;
+            overflow: hidden;
         }
-        
+
+        /* ── header stays at top ── */
+        .app-header {
+            flex: 0 0 auto;
+            text-align: center;
+            padding: 18px 20px 10px;
+            background: #2c2c2c;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 171, 61, 0.15);
+        }
+
+        .app-header h1 {
+            font-size: 32px;
+            margin: 0;
+            color: white;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ── main row: two columns, 50/50 ── */
         .main-content {
             display: flex;
-            gap: 100px;
+            flex: 1 1 0;
+            /* fill remaining height */
             width: 100%;
-            align-items: flex-start;
+            overflow: hidden;
+            min-height: 0;
+            /* flex override */
         }
-        
+
+        /* ── LEFT COLUMN: fixed (sticky) ── */
         .left-panel {
-            flex: 0 0 400px;
+            flex: 0 0 60%;
+            width: 60%;
+            height: 100%;
+            position: sticky;
+            top: 0;
+            overflow: hidden;
+            /* keep content inside */
+            background: #2c2c2c;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px 30px 30px;
+            border-right: 2px solid rgba(255, 171, 61, 0.2);
+            z-index: 2;
         }
-        
-        .right-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+
+        .left-panel .panel-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
         }
-        
+
         .search-container {
             width: 100%;
+            max-width: 440px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            flex: 1 1 auto;
+            justify-content: start;
         }
-        
+
         .search-input {
             width: 100%;
             padding: 15px;
@@ -74,30 +111,31 @@
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
-        
+
         .search-input:hover {
             background: rgba(255, 171, 61, 0.331);
         }
-        
+
         .search-input:focus {
             outline: none;
             background: rgba(255, 171, 61, 0.331);
         }
-        
+
         .search-input::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
-        
+
         .keyboard {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             margin-bottom: 20px;
             width: 100%;
+            max-width: 440px;
         }
-        
+
         .key {
-            padding: 15px 30px;
+            padding: 15px 10px;
             background: rgba(255, 171, 61, 0.199);
             border: 2px solid #FFAA3DFF;
             border-radius: 10px;
@@ -113,27 +151,27 @@
             justify-content: center;
             backdrop-filter: blur(10px);
         }
-        
+
         .key:hover {
             background: rgba(255, 171, 61, 0.331);
         }
-        
+
         .key:active {
-            transform: translateY(0);
+            transform: scale(0.95);
         }
-        
+
         .key.clear {
             background: linear-gradient(135deg, rgba(255, 100, 100, 0.3), rgba(255, 80, 80, 0.5));
         }
-        
+
         .key.clear:hover {
             background: linear-gradient(135deg, rgba(255, 100, 100, 0.5), rgba(255, 80, 80, 0.7));
         }
-        
+
         .key.backspace {
             background: linear-gradient(135deg, rgba(255, 200, 100, 0.3), rgba(255, 180, 80, 0.5));
         }
-        
+
         .key.backspace:hover {
             background: linear-gradient(135deg, rgba(255, 200, 100, 0.5), rgba(255, 180, 80, 0.7));
         }
@@ -141,18 +179,51 @@
         .key.enter {
             background: linear-gradient(135deg, rgba(100, 255, 100, 0.3), rgba(80, 255, 80, 0.5));
         }
-        
+
         .key.enter:hover {
             background: linear-gradient(135deg, rgba(100, 255, 100, 0.5), rgba(80, 255, 80, 0.7));
         }
-        
+
+        .search-results {
+            text-align: center;
+            margin: 10px 0 0;
+            font-size: 18px;
+            min-height: 28px;
+            width: 100%;
+            max-width: 440px;
+            color: #99ff99;
+            font-weight: 500;
+        }
+
+        /* ── RIGHT COLUMN: scrollable ── */
+        .right-panel {
+            flex: 0 0 40%;
+            width: 40%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px 30px 40px;
+            background: #2c2c2c;
+            scroll-behavior: smooth;
+        }
+
+        .right-panel .panel-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
+        }
+
         .rooms-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 20px;
             width: 100%;
         }
-        
+
         .room-btn {
             padding: 25px 15px;
             background: rgba(255, 171, 61, 0.199);
@@ -170,34 +241,41 @@
             min-height: 140px;
             backdrop-filter: blur(10px);
         }
-        
+
         .room-btn:hover {
             background: rgba(255, 171, 61, 0.331);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 171, 61, 0.15);
         }
-        
+
         .room-btn:active {
-            transform: translateY(0);
+            transform: scale(0.96);
         }
-        
+
         .room-btn.selected {
             background: rgba(255, 171, 61, 0.331);
+            border-color: #FFAA3DFF;
+            box-shadow: 0 0 20px rgba(255, 171, 61, 0.25);
         }
-        
+
         .room-btn.highlighted {
-            /* background: linear-gradient(135deg, rgba(100, 255, 100, 0.3), rgba(80, 255, 80, 0.5));
-            border-color: #4CAF50; */
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.25);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
         }
-        
+
         .loading {
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
         }
-        
+
         .error {
             background: rgba(255, 0, 0, 0.2);
             border: 1px solid rgba(255, 100, 100, 0.5);
@@ -207,36 +285,158 @@
             text-align: center;
             width: 100%;
             backdrop-filter: blur(5px);
+            color: #ff9999;
         }
-        
-        .search-results {
-            text-align: center;
-            margin: 15px 0;
-            font-size: 18px;
-            min-height: 24px;
+
+        #error-container {
             width: 100%;
         }
-        
-        .panel-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            width: 100%;
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+
+        /* ── scrollbar styling for right panel ── */
+        .right-panel::-webkit-scrollbar {
+            width: 6px;
         }
+
+        .right-panel::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .right-panel::-webkit-scrollbar-thumb {
+            background: rgba(255, 171, 61, 0.4);
+            border-radius: 8px;
+        }
+
+        .right-panel::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 171, 61, 0.6);
+        }
+
+        /* ── responsive tweaks ── */
+        @media (max-width: 768px) {
+            .left-panel {
+                padding: 16px 16px 20px;
+            }
+            .right-panel {
+                padding: 16px 16px 30px;
+            }
+            .left-panel .panel-title,
+            .right-panel .panel-title {
+                font-size: 20px;
+            }
+            .search-input {
+                font-size: 18px;
+                padding: 12px;
+            }
+            .key {
+                font-size: 20px;
+                padding: 12px 8px;
+            }
+            .room-btn {
+                font-size: 26px;
+                min-height: 110px;
+                padding: 18px 12px;
+            }
+            .app-header h1 {
+                font-size: 26px;
+            }
+            .keyboard {
+                gap: 10px;
+            }
+            .rooms-container {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 14px;
+            }
+        }
+
+        /* @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            .left-panel {
+                flex: 0 0 auto;
+                width: 100%;
+                position: relative;
+                top: auto;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid rgba(255, 171, 61, 0.2);
+                padding: 16px;
+            }
+            .right-panel {
+                flex: 0 0 auto;
+                width: 100%;
+                height: auto;
+                overflow-y: visible;
+                padding: 16px;
+            }
+            .app {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+            }
+            html,
+            body {
+                overflow: auto;
+            }
+            .search-container {
+                max-width: 100%;
+            }
+            .keyboard {
+                max-width: 100%;
+            }
+            .search-results {
+                max-width: 100%;
+            }
+            .rooms-container {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            .app-header {
+                padding: 14px 16px 8px;
+            }
+            .app-header h1 {
+                font-size: 24px;
+            }
+        } */
+
+        /* @media (max-width: 400px) {
+            .room-btn {
+                font-size: 22px;
+                min-height: 90px;
+                padding: 14px 10px;
+            }
+            .rooms-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 12px;
+            }
+            .key {
+                font-size: 18px;
+                padding: 10px 6px;
+            }
+            .search-input {
+                font-size: 16px;
+                padding: 10px;
+            }
+        } */
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Выберите комнату</h1>
-        
+
+    <div class="app">
+        <!-- ─── HEADER ─── -->
+        <header class="app-header">
+            <h1>Выберите комнату</h1>
+        </header>
+
+        <!-- ─── MAIN ROW: TWO COLUMNS ─── -->
         <div class="main-content">
+
+            <!-- ─── LEFT COLUMN – FIXED (STICKY) ─── -->
             <div class="left-panel">
                 <div class="panel-title">Введите номер комнаты</div>
                 <div class="search-container">
                     <input type="text" class="search-input" id="search-input" placeholder="Enter room number..." readonly>
-                    
+
                     <div class="keyboard">
                         <div class="key" data-key="1">1</div>
                         <div class="key" data-key="2">2</div>
@@ -251,27 +451,30 @@
                         <div class="key" data-key="0">0</div>
                         <div class="key enter" data-key="enter">Enter</div>
                     </div>
-                    
+
                     <div class="search-results" id="search-results"></div>
                 </div>
             </div>
-            
-            <!-- Правая панель - список комнат -->
+
+            <!-- ─── RIGHT COLUMN – SCROLLABLE ─── -->
             <div class="right-panel">
                 <div class="panel-title">Или выберите из списка</div>
-                
+
                 <div class="loading" id="loading">
                     <p>Loading available rooms...</p>
                 </div>
 
                 <div id="error-container"></div>
-                
+
                 <div id="rooms-container" class="rooms-container" style="display: none;">
                     <!-- Room buttons will be dynamically added here -->
                 </div>
             </div>
+
         </div>
+        <!-- /main-content -->
     </div>
+    <!-- /app -->
 
     <script>
         let selectedRoom = null;
@@ -284,17 +487,17 @@
             const roomsContainer = document.getElementById('rooms-container');
             const searchInput = document.getElementById('search-input');
             const searchResults = document.getElementById('search-results');
-            
+
             // Initialize keyboard
             initializeKeyboard();
-            
+
             loadRoomData();
-            
+
             async function loadRoomData() {
                 try {
                     const response = await fetch('get-file.php');
                     const result = await response.json();
-                    
+
                     if (result.success) {
                         roomsData = result.data;
                         filteredRooms = [...roomsData.Rooms];
@@ -310,17 +513,17 @@
                     loadingEl.style.display = 'none';
                 }
             }
-            
+
             function initializeKeyboard() {
                 const keys = document.querySelectorAll('.key');
-                
+
                 keys.forEach(key => {
                     key.addEventListener('click', function() {
                         const keyValue = this.getAttribute('data-key');
                         handleKeyPress(keyValue);
                     });
                 });
-                
+
                 // Also allow physical keyboard input
                 searchInput.addEventListener('keydown', function(e) {
                     if (e.key >= '0' && e.key <= '9') {
@@ -337,16 +540,16 @@
                         e.preventDefault();
                     }
                 });
-                
+
                 // Remove readonly to allow focus
                 searchInput.removeAttribute('readonly');
                 searchInput.focus();
             }
-            
+
             function handleKeyPress(key) {
                 const currentValue = searchInput.value;
-                
-                switch(key) {
+
+                switch (key) {
                     case 'clear':
                         searchInput.value = '';
                         break;
@@ -362,36 +565,36 @@
                         }
                         break;
                 }
-                
+
                 filterRooms(searchInput.value);
             }
-            
+
             function filterRooms(searchTerm) {
                 if (!searchTerm) {
                     filteredRooms = [...roomsData.Rooms];
                     searchResults.textContent = '';
                 } else {
-                    filteredRooms = roomsData.Rooms.filter(room => 
+                    filteredRooms = roomsData.Rooms.filter(room =>
                         room.Number.includes(searchTerm)
                     );
-                    
+
                     if (filteredRooms.length === 0) {
                         searchResults.textContent = 'No rooms found matching "' + searchTerm + '"';
                         searchResults.style.color = '#ff9999';
                     } else {
                         searchResults.textContent = `Found ${filteredRooms.length} room(s)`;
                         searchResults.style.color = '#99ff99';
-                        
+
                         // Auto-select if only one room matches
                         if (filteredRooms.length === 1) {
                             highlightRoom(filteredRooms[0].Number);
                         }
                     }
                 }
-                
+
                 displayRooms(filteredRooms);
             }
-            
+
             function highlightRoom(roomNumber) {
                 document.querySelectorAll('.room-btn').forEach(btn => {
                     btn.classList.remove('highlighted');
@@ -401,7 +604,7 @@
                     }
                 });
             }
-            
+
             function selectFirstFilteredRoom() {
                 if (filteredRooms.length > 0) {
                     const roomNumber = filteredRooms[0].Number;
@@ -412,27 +615,27 @@
 
             function selectRoomByInput() {
                 const roomNumber = searchInput.value.trim();
-                
+
                 if (!roomNumber) {
                     searchResults.textContent = 'Please enter a room number';
                     searchResults.style.color = '#ff9999';
                     return;
                 }
-                
+
                 const foundRoom = roomsData.Rooms.find(room => room.Number === roomNumber);
-                
+
                 if (foundRoom) {
                     setCookie("RoomNumber", roomNumber);
                     window.location.href = `PDFViewer.HTML`;
                 } else {
                     searchResults.textContent = `Room ${roomNumber} not found`;
                     searchResults.style.color = '#ff9999';
-                    
+
                     // Check if there are any similar rooms
-                    const similarRooms = roomsData.Rooms.filter(room => 
+                    const similarRooms = roomsData.Rooms.filter(room =>
                         room.Number.includes(roomNumber)
                     );
-                    
+
                     if (similarRooms.length > 0) {
                         searchResults.textContent += `. Did you mean: ${similarRooms.slice(0, 3).map(r => r.Number).join(', ')}?`;
                         // Highlight similar rooms
@@ -440,10 +643,10 @@
                     }
                 }
             }
-            
+
             function displayRooms(rooms) {
                 roomsContainer.innerHTML = '';
-                
+
                 if (!rooms || rooms.length === 0) {
                     if (searchInput.value) {
                         // Don't show error if we're searching and no results
@@ -452,39 +655,39 @@
                     showError('No rooms available');
                     return;
                 }
-                
+
                 // Sort rooms by number
                 rooms.sort((a, b) => {
                     const numA = parseInt(a.Number);
                     const numB = parseInt(b.Number);
                     return numA - numB;
                 });
-                
+
                 rooms.forEach(room => {
                     const roomBtn = document.createElement('div');
                     roomBtn.className = 'room-btn';
                     roomBtn.textContent = room.Number;
                     roomBtn.setAttribute('data-room', room.Number);
-                    
+
                     roomBtn.addEventListener('click', function() {
                         document.querySelectorAll('.room-btn').forEach(btn => {
                             btn.classList.remove('selected');
                         });
-                        
+
                         roomBtn.classList.add('selected');
                         selectedRoom = room.Number;
-                        
+
                         setCookie("RoomNumber", selectedRoom);
                         window.location.href = `PDFViewer.HTML`;
                     });
-                    
+
                     roomsContainer.appendChild(roomBtn);
                 });
-                
+
                 // Apply highlighting without causing recursion
                 applySearchHighlighting();
             }
-            
+
             function applySearchHighlighting() {
                 // Only apply highlighting if there's an active search
                 if (!searchInput.value) {
@@ -493,7 +696,7 @@
                     });
                     return;
                 }
-                
+
                 // Highlight rooms that match the current search
                 document.querySelectorAll('.room-btn').forEach(btn => {
                     const roomNumber = btn.getAttribute('data-room');
@@ -504,7 +707,7 @@
                     }
                 });
             }
-            
+
             function showError(message) {
                 errorContainer.innerHTML = '<div class="error">' + message + '</div>';
             }
@@ -520,7 +723,7 @@
         function getCookie(name) {
             const nameEQ = name + "=";
             const cookies = document.cookie.split(';');
-            
+
             for (let i = 0; i < cookies.length; i++) {
                 let cookie = cookies[i];
                 while (cookie.charAt(0) === ' ') {
@@ -533,5 +736,6 @@
             return null;
         }
     </script>
+
 </body>
 </html>

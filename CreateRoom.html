@@ -44,7 +44,7 @@
             margin-bottom: 20px;
             line-height: 1.5;
             max-width: 600px;
-            font-size: 18px;
+            font-size: 24px;
             opacity: 0.9;
         }
         
@@ -52,23 +52,23 @@
             border-radius: 15px;
             padding: 30px;
             width: 100%;
-            max-width: 500px;
+            max-width: 700px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
-            background: rgba(255, 171, 61, 0.199);
-            border: 2px solid #FFAA3DFF;
+            /* background: rgba(255, 171, 61, 0.199);
+            border: 2px solid #FFAA3DFF; */
         }
         
         .file-input {
             width: 100%;
             padding: 15px;
-            background: rgba(255, 171, 61, 0.199);
-            border: 2px solid #FFAA3DFF;
+            background: rgba(255, 255, 255, 0.064);
+            border: 2px solid rgba(255, 255, 255, 0.212);
             border-radius: 10px;
             color: white;
-            font-size: 16px;
+            font-size: 24px;
             transition: all 0.3s ease;
         }
         
@@ -94,19 +94,19 @@
         
         .action-btn {
             padding: 15px 30px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 171, 61, 0.199);
+            border: 2px solid #FFAA3DFF;
             border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             transition: all 0.3s ease;
             width: 100%;
         }
         
         .action-btn:hover {
-            background: linear-gradient(135deg, #45a049, #4CAF50);
+             background: rgba(255, 171, 61, 0.331);
         }
         
         .action-btn:active {
@@ -154,6 +154,24 @@
             width: 100%;
             backdrop-filter: blur(5px);
         }
+
+        .created {
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-size: 24px;
+            opacity: 0.9;
+
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
@@ -167,6 +185,14 @@
         <div class="upload-section">
             <input type="file" id="pdfFile" accept=".pdf"  class="file-input">
             <button onclick="uploadFile()" class="action-btn">Загрузить PDF</button>
+        </div>
+
+        <div class="created" id="created">
+            <!-- Комната успешно создана! -->
+            <h1 id="roomNumber">
+                Номер комнаты 3456
+        </h1>
+            <button onclick="redirect()" class="action-btn">Перейти</button>
         </div>
     </div>
 
@@ -199,13 +225,27 @@
                 const result = await response.json();
                 if (result.success) {
                     setCookie("RoomNumber", result.room.Number);
-                    window.location.href = `PDFViewer.HTML`;
+                    successCreated(result.room.Number);
                 } else {
                     alert('Ошибка: ' + result.message);
                 }
             } catch (error) {
                 console.error('Ошибка:', error);
             }
+        }
+
+        function successCreated(roomNumber) {
+            //window.location.href = `PDFViewer.HTML`;
+
+            section = document.getElementById("created");
+            section.style.visibility = "visible";
+
+            text = document.getElementById("roomNumber");
+            text.innerText = "Номер комнаты " + roomNumber;
+        }
+
+        function redirect() {
+            window.location.href = `PDFViewer.HTML`;
         }
 
         function setCookie(name, value, days = 1) {

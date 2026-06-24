@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 
 // Максимальный размер загружаемого файла (1 МБ)
-define('MAX_FILE_SIZE', 0.7 * 1024 * 1024);
+//define('MAX_FILE_SIZE', 0.7 * 1024 * 1024);
 
 $uploadDir = __DIR__ . '/Uploads/';
 
@@ -37,15 +37,15 @@ if ($file['error'] !== UPLOAD_ERR_OK) {
     exit;
 }
 
-// 2. Проверка размера файла (собственный лимит)
-if ($file['size'] > MAX_FILE_SIZE) {
-    http_response_code(413); // Payload Too Large
-    echo json_encode([
-        'success' => false,
-        'message' => 'Файл слишком большой. Максимальный размер: ' . (MAX_FILE_SIZE / 1024 / 1024) . ' МБ'
-    ]);
-    exit;
-}
+// // 2. Проверка размера файла (собственный лимит)
+// if ($file['size'] > MAX_FILE_SIZE) {
+//     http_response_code(413); // Payload Too Large
+//     echo json_encode([
+//         'success' => false,
+//         'message' => 'Файл слишком большой. Максимальный размер: ' . (MAX_FILE_SIZE / 1024 / 1024) . ' МБ'
+//     ]);
+//     exit;
+// }
 
 // Проверка типа файла
 $allowedTypes = ['application/pdf'];
